@@ -130,7 +130,26 @@ input:focus,select:focus{border-color:#7F77DD}
 .carteira-tabs{display:flex;gap:8px;padding:12px 20px;border-bottom:1px solid #f0effe;flex-shrink:0;overflow-x:auto}
 .ctab{flex-shrink:0;padding:7px 16px;border-radius:99px;border:1px solid #ddd;background:#fff;font-size:13px;color:#888;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px}
 .ctab.active{background:#7F77DD;border-color:#7F77DD;color:#fff}
-.carteira-card{margin:14px 20px 0;border-radius:16px;padding:18px;position:relative;color:#fff;overflow:hidden}
+.carteira-card{
+  margin:14px 20px 0;
+  border-radius:16px;
+  padding:18px;
+  position:relative;
+  color:#fff;
+  overflow:hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.carteira-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+}
+
+.carteira-card:active {
+  transform: translateY(-4px);
+}
 .carteira-top{display:flex;justify-content:space-between;align-items:flex-start}
 .carteira-nome{font-size:16px;font-weight:700}
 .carteira-datas{font-size:11px;opacity:.85;margin-top:2px}
@@ -218,6 +237,441 @@ input:focus,select:focus{border-color:#7F77DD}
 .loading-screen.active{display:flex}
 .spinner{width:32px;height:32px;border:3px solid #EEEDFE;border-top-color:#7F77DD;border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* Melhorias de UX/UI */
+.chart-card {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.chart-card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+}
+
+#pieChart {
+  transition: opacity 0.2s ease;
+}
+
+#pieChart:hover {
+  opacity: 0.9;
+}
+
+.leg-item {
+  transition: background-color 0.2s ease, padding-left 0.2s ease;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.leg-item:hover {
+  background-color: rgba(0,0,0,0.04);
+  padding-left: 12px;
+}
+
+.leg-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  transition: transform 0.2s ease;
+}
+
+.leg-item:hover .leg-dot {
+  transform: scale(1.3);
+}
+
+/* Cartões de crédito melhorados */
+.carteira-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.carteira-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.carteira-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, 20px); }
+}
+
+/* Modal smooth transitions */
+.modal-bg {
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-box {
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Botões com feedback visual */
+.chip {
+  transition: all 0.2s ease;
+}
+
+.chip:active {
+  transform: scale(0.95);
+}
+
+.chip.sel {
+  animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Melhorias de tipografia */
+.sec-title {
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #2a2a3e;
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #f0f0f5;
+}
+
+
+.carteira-status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.carteira-del {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.carteira-del:hover {
+  background: rgba(255,255,255,0.3);
+  transform: rotate(90deg);
+}
+
+.carteira-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.carteira-nome {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.carteira-datas {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.carteira-fatura-lbl {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+.carteira-fatura-val {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.carteira-limite-bar-bg {
+  height: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.carteira-limite-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.carteira-limite-txt {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+
+/* Skeleton Screens - Animação de carregamento */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f5 25%, #e0e0e8 50%, #f0f0f5 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  height: 120px;
+  border-radius: 12px;
+  margin: 14px 20px 0;
+}
+
+.skeleton-text {
+  height: 12px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.skeleton-text.large {
+  height: 24px;
+  margin-bottom: 12px;
+}
+
+
+/* Feedback Visual - Sucesso e Erro */
+@keyframes slideInSuccess {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutSuccess {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.success-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: slideInSuccess 0.3s ease;
+  z-index: 1000;
+}
+
+.success-toast.hide {
+  animation: slideOutSuccess 0.3s ease forwards;
+}
+
+/* Melhorias de Botões */
+.btn-tool {
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-tool:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-tool:active {
+  transform: translateY(0);
+}
+
+.btn-tool.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-tool.btn-primary:hover {
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* Melhorias de Input */
+input, select {
+  transition: all 0.2s ease;
+  border: 1px solid #e0e0e8;
+}
+
+input:focus, select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  outline: none;
+}
+
+input::placeholder {
+  color: #bbb;
+  transition: color 0.2s ease;
+}
+
+input:focus::placeholder {
+  color: #aaa;
+}
+
+/* Melhorias de Abas */
+.nav-btn {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.nav-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: width 0.3s ease;
+}
+
+.nav-btn.active::after {
+  width: 100%;
+}
+
+/* Melhorias de Listas */
+.lanc-item {
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.lanc-item:hover {
+  background-color: #f9f9fc;
+  border-left-color: #667eea;
+  transform: translateX(4px);
+}
+
+/* Melhorias de Modais */
+.modal-bg {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-box {
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Melhorias de Tipografia */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.sec-title {
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.sec-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #667eea, transparent);
+}
+
+/* Melhorias de Cards */
+.chart-card, .carteira-card {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.chart-card {
+  border: 1px solid #f5f5fa;
+}
+
+/* Melhorias de Cores de Texto */
+.leg-val {
+  font-weight: 600;
+  color: #667eea;
+}
+
+/* Animação de números (contador) */
+@keyframes countUp {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+.amount-value {
+  animation: countUp 0.3s ease;
+}
+
 </style>
 </head>
 <body>
@@ -485,7 +939,7 @@ input:focus,select:focus{border-color:#7F77DD}
       <div class="field-lbl">Carteira / forma de pagamento</div>
       <select id="new-carteira"></select>
       <div class="field-lbl">Categoria</div>
-      <div class="cat-chips" id="cat-chips-new"></div>
+      <select id="new-categoria"></select>
       <div id="new-parcela-fields" style="display:none">
         <div class="field-lbl">Parcelamento</div>
         <div class="two-col">
@@ -747,6 +1201,7 @@ var state = {
   catSel: '',
   corCarteiraSel: '#7F77DD',
   tipoCarteiraSel: 'conta',
+  filtroCategoria: null,
   tipoMetaSel: 'objetivo'
 };
 
@@ -982,6 +1437,20 @@ document.addEventListener('DOMContentLoaded', function() {
   var fileInput = document.getElementById('import-file');
   if (fileInput) fileInput.addEventListener('change', handleFileSelect);
 });
+
+function showSuccessToast(message) {
+  var toast = document.createElement('div');
+  toast.className = 'success-toast';
+  toast.textContent = message || 'Operacao realizada com sucesso!';
+  document.body.appendChild(toast);
+  
+  setTimeout(function() {
+    toast.classList.add('hide');
+    setTimeout(function() {
+      toast.remove();
+    }, 300);
+  }, 3000);
+}
 
 function buildMonthSelect() {
   var sel = document.getElementById('dash-month');
@@ -1381,11 +1850,43 @@ function renderDash() {
   }).join('') : '<div style="color:#aaa;font-size:12px">Nenhum gasto ainda</div>';
 
   if (pieChartInst) pieChartInst.destroy();
-  pieChartInst = new Chart(document.getElementById('pieChart'), {
+  var pieCanvas = document.getElementById('pieChart');
+  pieChartInst = new Chart(pieCanvas, {
     type: 'doughnut',
-    data: { labels: cats, datasets: [{ data: vals.length ? vals : [1], backgroundColor: vals.length ? colors : ['#f0effe'], borderWidth: 0 }] },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(ctx){ return ctx.label + ': ' + fmt(ctx.parsed); } } } } }
+    data: { labels: cats, datasets: [{ data: vals.length ? vals : [1], backgroundColor: vals.length ? colors : ['#f0effe'], borderWidth: 2, borderColor: '#fff' }] },
+    options: { 
+      responsive: true, 
+      maintainAspectRatio: false, 
+      cutout: '65%', 
+      plugins: { 
+        legend: { display: false }, 
+        tooltip: { 
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          padding: 12,
+          titleFont: { size: 14, weight: 'bold' },
+          bodyFont: { size: 13 },
+          callbacks: { 
+            label: function(ctx){ return fmt(ctx.parsed) + ' (' + Math.round(ctx.parsed/total*100) + '%)'; } 
+          } 
+        } 
+      }
+    }
   });
+  
+  // Adicionar interatividade ao clicar na rosca
+  pieCanvas.onclick = function(event) {
+    var points = pieChartInst.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+    if (points.length > 0) {
+      var dataIndex = points[0].index;
+      var selectedCat = cats[dataIndex];
+      // Filtrar lançamentos por categoria
+      state.filtroCategoria = selectedCat;
+      renderLancScreen();
+      // Scroll para a seção de lançamentos
+      setTimeout(function() { document.getElementById('lanc-list').scrollIntoView({ behavior: 'smooth' }); }, 100);
+    }
+  };
+  pieCanvas.style.cursor = 'pointer';
 
   var orcCats = Object.keys(state.orcamentos);
   var orcVals = orcCats.map(function(c){ return state.orcamentos[c]; });
@@ -1448,6 +1949,15 @@ function renderLancScreen() {
 }
 
 // ===== LANCAMENTOS / CARTEIRAS =====
+
+function renderLancScreenFiltered() {
+  var lancs = state.lancamentos;
+  if (state.filtroCategoria) {
+    lancs = lancs.filter(function(l) { return l.categoria === state.filtroCategoria; });
+  }
+  renderLancList(lancs);
+}
+
 function setPeriod(p, btn) {
   state.lancPeriod = p;
   var tabs = document.querySelectorAll('#lanc-tabs .ptab');
@@ -1546,17 +2056,23 @@ function buildCarteiraSelectNew() {
   if (sel.onchange) sel.onchange();
 }
 
-function buildCatChips() {
-  var el = document.getElementById('cat-chips-new');
-  el.innerHTML = state.categorias.map(function(c){
-    return '<button class="chip' + (c === state.catSel ? ' sel' : '') + '" onclick="selCat(\'' + c + '\')">' + c + '</button>';
+function buildCatSelect() {
+  var sel = document.getElementById('new-categoria');
+  sel.innerHTML = state.categorias.map(function(c){
+    return '<option value="' + c + '">' + c + '</option>';
   }).join('');
+  if (state.catSel && state.categorias.indexOf(state.catSel) !== -1) {
+    sel.value = state.catSel;
+  } else if (state.categorias.length > 0) {
+    sel.value = state.categorias[0];
+    state.catSel = state.categorias[0];
+  }
+  sel.onchange = function() {
+    state.catSel = sel.value;
+  };
 }
 
-function selCat(c) {
-  state.catSel = c;
-  buildCatChips();
-}
+
 
 function abrirModalNovoLanc() {
   document.getElementById('new-lanc-title').textContent = 'Novo lancamento';
@@ -1569,7 +2085,7 @@ function abrirModalNovoLanc() {
   selTipo('entrada');
   state.catSel = state.categorias.indexOf('Renda') !== -1 ? 'Renda' : state.categorias[0];
   buildCarteiraSelectNew();
-  buildCatChips();
+  buildCatSelect();
   openModal('modal-new');
 }
 
@@ -1590,7 +2106,7 @@ function editarLanc(id) {
   buildCarteiraSelectNew();
   document.getElementById('new-carteira').value = l.carteiraId;
   if (document.getElementById('new-carteira').onchange) document.getElementById('new-carteira').onchange();
-  buildCatChips();
+  buildCatSelect();
   openModal('modal-new');
 }
 
@@ -1600,16 +2116,17 @@ async function salvarLanc() {
   var val = parseFloat(document.getElementById('new-val').value);
   var data = document.getElementById('new-data').value;
   var carteiraId = document.getElementById('new-carteira').value;
+  var categoria = document.getElementById('new-categoria').value;
   var parcAtual = parseInt(document.getElementById('new-parc-atual').value) || 1;
   var parcTotal = parseInt(document.getElementById('new-parc-total').value) || 1;
 
-  if (!desc || !val || !data || !carteiraId) { alert('Preencha todos os campos!'); return; }
+  if (!desc || !val || !data || !carteiraId || !categoria) { alert('Preencha todos os campos!'); return; }
 
   var btn = document.getElementById('btn-salvar-lanc');
   btn.disabled = true;
 
   var payload = {
-    descricao: desc, valor: val, tipo: state.tipoSel, categoria: state.catSel, data: data,
+    descricao: desc, valor: val, tipo: state.tipoSel, categoria: categoria, data: data,
     carteira_id: carteiraId, parcela_atual: parcAtual, parcela_total: parcTotal
   };
 
