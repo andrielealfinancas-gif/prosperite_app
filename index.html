@@ -105,6 +105,8 @@ input:focus,select:focus{border-color:#7F77DD}
 .cat-chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}
 .chip{padding:7px 16px;border-radius:99px;border:1px solid #ddd;background:#fff;font-size:13px;color:#888;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
 .chip.sel{background:#EEEDFE;border-color:#7F77DD;color:#3C3489}
+.chip.sel-entrada{background:#EAF3DE;border-color:#3B6D11;color:#3B6D11}
+.chip.sel-saida{background:#FCEBEB;border-color:#E24B4A;color:#A32D2D}
 .chip-edit-ico{font-size:11px;opacity:.6}
 .upload-zone{border:2px dashed #d0cef8;border-radius:16px;padding:24px;text-align:center;margin:10px 0;background:#fafaff;cursor:pointer}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -130,7 +132,9 @@ input:focus,select:focus{border-color:#7F77DD}
 .carteira-tabs{display:flex;gap:8px;padding:12px 20px;border-bottom:1px solid #f0effe;flex-shrink:0;overflow-x:auto}
 .ctab{flex-shrink:0;padding:7px 16px;border-radius:99px;border:1px solid #ddd;background:#fff;font-size:13px;color:#888;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px}
 .ctab.active{background:#7F77DD;border-color:#7F77DD;color:#fff}
-.carteira-card{margin:14px 20px 0;border-radius:16px;padding:18px;position:relative;color:#fff;overflow:hidden}
+.carteira-card{margin:14px 20px 0;border-radius:16px;padding:18px;position:relative;color:#fff;overflow:hidden;cursor:pointer;transition:transform .15s}
+.carteira-card:active{transform:scale(.98)}
+.carteira-card.no-click{cursor:default}
 .carteira-top{display:flex;justify-content:space-between;align-items:flex-start}
 .carteira-nome{font-size:16px;font-weight:700}
 .carteira-datas{font-size:11px;opacity:.85;margin-top:2px}
@@ -202,6 +206,12 @@ input:focus,select:focus{border-color:#7F77DD}
 .total-invest-lbl{font-size:12px;opacity:.85;margin-bottom:4px}
 .total-invest-val{font-size:28px;font-weight:700}
 .total-invest-rent{font-size:13px;margin-top:6px;opacity:.95}
+.dash-carteira-item{display:flex;align-items:center;gap:12px;margin:0 20px;padding:12px 14px;background:#fff;border:1px solid #f0effe;border-radius:14px;margin-bottom:8px}
+.dash-carteira-ico{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;color:#fff}
+.dash-carteira-info{flex:1;min-width:0}
+.dash-carteira-nome{font-size:13px;font-weight:600;color:#1a1a2e}
+.dash-carteira-sub{font-size:11px;color:#aaa}
+.dash-carteira-val{font-size:14px;font-weight:700;flex-shrink:0}
 .auth-screen{display:none;flex-direction:column;flex:1;justify-content:center;padding:32px 28px;overflow-y:auto}
 .auth-screen.active{display:flex}
 .auth-logo{text-align:center;margin-bottom:8px;font-size:32px}
@@ -275,7 +285,7 @@ input:focus,select:focus{border-color:#7F77DD}
       <button class="month-nav" onclick="changeMonth(1)"><i class="ti ti-chevron-right"></i></button>
     </div>
     <div style="padding:14px 20px 0">
-      <div style="font-size:12px;color:#aaa">Olá, bem-vinda de volta</div>
+      <div style="font-size:12px;color:#aaa" id="dash-greeting">Olá, bem-vinda de volta</div>
       <div style="font-size:20px;font-weight:700;color:#1a1a2e" id="dash-name">—</div>
     </div>
     <div class="saldo-card">
@@ -284,6 +294,17 @@ input:focus,select:focus{border-color:#7F77DD}
         <div class="saldo-val" id="dash-saldo">R$ 0,00</div>
       </div>
       <div class="saldo-badge" id="dash-mes">—</div>
+    </div>
+
+    <div class="mini-row">
+      <div class="mini-card">
+        <div class="mini-lbl"><i class="ti ti-arrow-up-circle" style="color:#3B6D11;font-size:14px"></i>Receitas</div>
+        <div class="mini-val entrada" id="dash-receitas">R$ 0</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-lbl"><i class="ti ti-arrow-down-circle" style="color:#A32D2D;font-size:14px"></i>Gastos</div>
+        <div class="mini-val saida" id="dash-gastos">R$ 0</div>
+      </div>
     </div>
 
     <div class="score-card" id="score-card">
@@ -303,6 +324,18 @@ input:focus,select:focus{border-color:#7F77DD}
 
     <div id="alert-banners"></div>
 
+    <div class="sec-title">Resumo das carteiras</div>
+    <div id="dash-carteiras-resumo"></div>
+
+    <div class="sec-title">Dica para você</div>
+    <div class="dica-card" id="dica-card">
+      <div class="dica-ico"><i class="ti ti-bulb"></i></div>
+      <div class="dica-content">
+        <div class="dica-tag">Dica</div>
+        <div class="dica-texto" id="dica-texto">Carregando...</div>
+      </div>
+    </div>
+
     <div class="sec-title">Reserva de emergência</div>
     <div class="reserva-card" id="reserva-card"></div>
 
@@ -314,16 +347,6 @@ input:focus,select:focus{border-color:#7F77DD}
       <div class="proj-row" id="proj-row"></div>
     </div>
 
-    <div class="mini-row">
-      <div class="mini-card">
-        <div class="mini-lbl"><i class="ti ti-arrow-up-circle" style="color:#3B6D11;font-size:14px"></i>Receitas</div>
-        <div class="mini-val entrada" id="dash-receitas">R$ 0</div>
-      </div>
-      <div class="mini-card">
-        <div class="mini-lbl"><i class="ti ti-arrow-down-circle" style="color:#A32D2D;font-size:14px"></i>Gastos</div>
-        <div class="mini-val saida" id="dash-gastos">R$ 0</div>
-      </div>
-    </div>
     <div class="mini-row" style="margin-top:8px">
       <div class="mini-card">
         <div class="mini-lbl"><i class="ti ti-trending-up" style="color:#7F77DD;font-size:14px"></i>Maior gasto</div>
@@ -361,15 +384,6 @@ input:focus,select:focus{border-color:#7F77DD}
         <div class="bar-leg-item"><span class="bar-leg-sq" style="background:#F0997B"></span>Gastos</div>
       </div>
       <div style="position:relative;width:100%;height:130px"><canvas id="compChart"></canvas></div>
-    </div>
-
-    <div class="sec-title">Dica para você</div>
-    <div class="dica-card" id="dica-card">
-      <div class="dica-ico"><i class="ti ti-bulb"></i></div>
-      <div class="dica-content">
-        <div class="dica-tag">Dica</div>
-        <div class="dica-texto" id="dica-texto">Carregando...</div>
-      </div>
     </div>
   </div>
 
@@ -479,13 +493,13 @@ input:focus,select:focus{border-color:#7F77DD}
       </div>
       <div class="field-lbl">Tipo</div>
       <div style="display:flex;gap:8px;margin-top:4px">
-        <button class="chip" id="tipo-s" onclick="selTipo('saida')"><i class="ti ti-arrow-down-circle"></i> Saída</button>
-        <button class="chip sel" id="tipo-e" onclick="selTipo('entrada')"><i class="ti ti-arrow-up-circle"></i> Entrada</button>
+        <button class="chip" id="tipo-s" onclick="selTipo('saida')" style="border-color:#E24B4A"><i class="ti ti-arrow-down-circle"></i> Saída</button>
+        <button class="chip sel" id="tipo-e" onclick="selTipo('entrada')" style="border-color:#3B6D11"><i class="ti ti-arrow-up-circle"></i> Entrada</button>
       </div>
       <div class="field-lbl">Carteira / forma de pagamento</div>
       <select id="new-carteira"></select>
       <div class="field-lbl">Categoria</div>
-      <div class="cat-chips" id="cat-chips-new"></div>
+      <select id="new-categoria-select"></select>
       <div id="new-parcela-fields" style="display:none">
         <div class="field-lbl">Parcelamento</div>
         <div class="two-col">
@@ -1342,6 +1356,39 @@ function renderDica(receitas, gastos, saldo) {
   document.getElementById('dica-texto').textContent = dica.texto;
 }
 
+function getGreeting() {
+  var h = new Date().getHours();
+  if (h < 12) return 'Bom dia, bem-vinda de volta';
+  if (h < 18) return 'Boa tarde, bem-vinda de volta';
+  return 'Boa noite, bem-vinda de volta';
+}
+
+function renderDashCarteirasResumo() {
+  var el = document.getElementById('dash-carteiras-resumo');
+  if (!state.carteiras.length) { el.innerHTML = '<div class="empty-state" style="padding:24px 20px"><i class="ti ti-wallet-off" style="font-size:36px"></i>Nenhuma carteira cadastrada</div>'; return; }
+
+  el.innerHTML = state.carteiras.map(function(c){
+    var icon = c.tipo === 'cartao' ? 'ti-credit-card' : 'ti-cash';
+    var val, sub;
+    if (c.tipo === 'cartao') {
+      val = getFaturaCarteira(c.id, state.currentMonth, state.currentYear);
+      sub = 'Fatura do mês';
+    } else {
+      var lancsConta = getLancForPeriod('mensal', state.currentMonth, state.currentYear).filter(function(l){ return l.carteiraId === c.id; });
+      var rec = lancsConta.filter(function(l){ return l.tipo === 'entrada'; }).reduce(function(a,l){ return a+l.valor; }, 0);
+      var gas = lancsConta.filter(function(l){ return l.tipo === 'saida'; }).reduce(function(a,l){ return a+l.valor; }, 0);
+      val = rec - gas;
+      sub = 'Saldo do mês';
+    }
+    var corVal = val < 0 ? '#A32D2D' : '#1a1a2e';
+    return '<div class="dash-carteira-item" onclick="nav(\'lanc\');setMainSubtab(\'' + (c.tipo === 'cartao' ? 'cart' : 'lanc') + '\')">' +
+      '<div class="dash-carteira-ico" style="background:' + c.cor + '"><i class="ti ' + icon + '"></i></div>' +
+      '<div class="dash-carteira-info"><div class="dash-carteira-nome">' + c.nome + '</div><div class="dash-carteira-sub">' + sub + '</div></div>' +
+      '<div class="dash-carteira-val" style="color:' + corVal + '">' + fmt(val) + '</div>' +
+    '</div>';
+  }).join('');
+}
+
 function renderDash() {
   var m = state.currentMonth, y = state.currentYear;
   var lancs = getLancForPeriod('mensal', m, y);
@@ -1356,6 +1403,7 @@ function renderDash() {
   document.getElementById('dash-gastos').textContent = fmt(gastos);
   document.getElementById('dash-mes').textContent = MESES[m];
   document.getElementById('dash-faturas').textContent = fmtShort(totalFaturasAbertas());
+  document.getElementById('dash-greeting').textContent = getGreeting();
 
   renderScore(receitas, gastos, saldo);
   renderAlertas();
@@ -1363,6 +1411,7 @@ function renderDash() {
   renderTotalInvestCard();
   renderProjecao();
   renderDica(receitas, gastos, saldo);
+  renderDashCarteirasResumo();
 
   var catGastos = {};
   lancs.filter(function(l){ return l.tipo === 'saida'; }).forEach(function(l){ catGastos[l.categoria] = (catGastos[l.categoria] || 0) + l.valor; });
@@ -1528,8 +1577,8 @@ function renderLanc() {
 
 function selTipo(t) {
   state.tipoSel = t;
-  document.getElementById('tipo-s').classList.toggle('sel', t === 'saida');
-  document.getElementById('tipo-e').classList.toggle('sel', t === 'entrada');
+  document.getElementById('tipo-s').classList.toggle('sel-saida', t === 'saida');
+  document.getElementById('tipo-e').classList.toggle('sel-entrada', t === 'entrada');
 }
 
 function buildCarteiraSelectNew() {
@@ -1547,10 +1596,11 @@ function buildCarteiraSelectNew() {
 }
 
 function buildCatChips() {
-  var el = document.getElementById('cat-chips-new');
-  el.innerHTML = state.categorias.map(function(c){
-    return '<button class="chip' + (c === state.catSel ? ' sel' : '') + '" onclick="selCat(\'' + c + '\')">' + c + '</button>';
+  var sel = document.getElementById('new-categoria-select');
+  sel.innerHTML = state.categorias.map(function(c){
+    return '<option value="' + c + '"' + (c === state.catSel ? ' selected' : '') + '>' + c + '</option>';
   }).join('');
+  sel.onchange = function() { state.catSel = sel.value; };
 }
 
 function selCat(c) {
@@ -1591,6 +1641,27 @@ function editarLanc(id) {
   document.getElementById('new-carteira').value = l.carteiraId;
   if (document.getElementById('new-carteira').onchange) document.getElementById('new-carteira').onchange();
   buildCatChips();
+  document.getElementById('new-categoria-select').value = l.categoria;
+  openModal('modal-new');
+}
+  var l = null;
+  for (var i = 0; i < state.lancamentos.length; i++) if (state.lancamentos[i].id === id) l = state.lancamentos[i];
+  if (!l) return;
+
+  document.getElementById('new-lanc-title').textContent = 'Editar lançamento';
+  document.getElementById('new-edit-id').value = l.id;
+  document.getElementById('new-desc').value = l.desc;
+  document.getElementById('new-val').value = l.valor;
+  document.getElementById('new-data').value = l.data;
+  document.getElementById('new-parc-atual').value = l.parcelaAtual;
+  document.getElementById('new-parc-total').value = l.parcelaTotal;
+  selTipo(l.tipo);
+  state.catSel = l.categoria;
+  buildCarteiraSelectNew();
+  document.getElementById('new-carteira').value = l.carteiraId;
+  if (document.getElementById('new-carteira').onchange) document.getElementById('new-carteira').onchange();
+  buildCatChips();
+  document.getElementById('new-categoria-select').value = l.categoria;
   openModal('modal-new');
 }
 
@@ -1841,15 +1912,15 @@ function renderCartaoResumoList() {
   el.innerHTML = cartoes.map(function(c){
     var fatura = getFaturaCarteira(c.id, state.currentMonth, state.currentYear);
     var pctLimite = c.limite > 0 ? Math.min(Math.round(fatura / c.limite * 100), 100) : 0;
-    return '<div class="carteira-card" style="background:linear-gradient(135deg, ' + c.cor + ', ' + c.cor + 'cc)">' +
-      '<button class="carteira-del" onclick="editarCarteiraDoCartao(\'' + c.id + '\')"><i class="ti ti-pencil"></i></button>' +
+    return '<div class="carteira-card" style="background:linear-gradient(135deg, ' + c.cor + ', ' + c.cor + 'cc)" onclick="verLancamentosCartao(\'' + c.id + '\')">' +
+      '<button class="carteira-del" onclick="event.stopPropagation();editarCarteiraDoCartao(\'' + c.id + '\')"><i class="ti ti-pencil"></i></button>' +
       '<div class="carteira-top"><div><div class="carteira-nome">' + c.nome + '</div>' +
       '<div class="carteira-datas">Fecha dia ' + (c.fechamento || '—') + ' · Vence dia ' + (c.vencimento || '—') + '</div></div>' +
       '<i class="ti ti-credit-card" style="font-size:26px;opacity:.7"></i></div>' +
       '<div class="carteira-fatura-lbl">Fatura do mês</div><div class="carteira-fatura-val">' + fmt(fatura) + '</div>' +
       (c.limite ? '<div class="carteira-limite-bar-bg"><div class="carteira-limite-bar-fill" style="width:' + pctLimite + '%"></div></div>' +
       '<div class="carteira-limite-txt"><span>' + pctLimite + '% do limite</span><span>Limite: ' + fmt(c.limite) + '</span></div>' : '') +
-      '<button class="btn-tool" style="width:100%;justify-content:center;margin-top:12px;background:rgba(255,255,255,.2);border:none;color:#fff" onclick="verLancamentosCartao(\'' + c.id + '\')"><i class="ti ti-list"></i> Ver lançamentos</button>' +
+      '<div style="display:flex;align-items:center;gap:5px;margin-top:12px;font-size:12px;opacity:.9"><i class="ti ti-list"></i> Toque para ver lançamentos</div>' +
       '</div>';
   }).join('');
 }
